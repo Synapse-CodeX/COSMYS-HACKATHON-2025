@@ -1,35 +1,61 @@
-import argparse
+import numpy as np
+import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-import numpy as np
-from pathlib import Path
+from tensorflow.keras.applications.xception import preprocess_input as xcep_preprocess
+from tensorflow.keras.utils import Sequence
+from sklearn.metrics import classification_report, confusion_matrix
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--data_path', type=str, required=True,
-                    help='Path to the test data folder')
-args = parser.parse_args()
-val_dir = Path(args.data_path)
+val_dir = "/kaggle/input/cosmys-hackathon5/Comys_Hackathon5/Task_A/val"
+model_path = "models/best_model.h5"
+
+IMG_SIZE = (224, 224)
+BATCH_SIZE = 32
 
 
-model = load_model("models/best_model.h5")
+model = load_model(model_path)
 
-val_datagen = ImageDataGenerator(rescale=1./255)
-val_generator = val_datagen.flow_from_directory(
-    str(val_dir),
-    target_size=(224, 224),
-    batch_size=32,
+
+val_datagen = ImageDataGenerator()
+val_gen = val_datagen.flow_from_directory(
+    val_dir,
+    target_size=IMG_SIZE,
+    batch_size=BATCH_SIZE,
     class_mode='binary',
     shuffle=False
 )
 
-val_generator.reset()
-y_true = val_generator.classes
-y_pred_probs = model.predict(val_generator)
-y_pred = (y_pred_probs > 0.5).astype("int").reshape(-1)
 
-print("✔️ Accuracy:", accuracy_score(y_true, y_pred))
-print("📊 Classification Report:")
-print(classification_report(y_true, y_pred, target_names=["Female", "Male"]))
-print("📉 Confusion Matrix:")
-print(confusion_matrix(y_true, y_pred))
+def mesonet_preprocess(x):
+    return x / 255.0
+
+
+class DualInputGenerator(Sequence):
+    def __init__(self, base_gen, preprocess1, preprocess2):
+        self.base_gen = base_gen
+        self.preprocess1 = preprocess1
+        self.preprocess2 = preprocess2
+
+    def __len__(self):
+        return len(self.base_gen)
+
+    def __getitem__(self, idx):
+        images, labels = self.base_gen[idx]
+        input1 = self.preprocess1(images.copy())
+        input2 = self.preprocess2(images.copy())
+        return (input1, input2), labels
+
+
+val_dual = DualInputGenerator(val_gen, xcep_preprocess, mesonet_preprocess)
+
+
+pred_probs = model.predict(val_dual)
+pred_labels = (pred_probs > 0.5).astype(int).flatten()
+true_labels = val_gen.classes
+
+
+print("Classification Report:")
+print(classification_report(true_labels, pred_labels, target_names=val_gen.class_indices.keys()))
+
+print("Confusion Matrix:")
+print(confusion_matrix(true_labels, pred_labels))
