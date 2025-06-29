@@ -1,0 +1,15 @@
+Accuracy: 94.68%
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      female       0.93      0.96      0.94       210
+        male       0.96      0.93      0.94       190
+
+    accuracy                           0.95       400
+   macro avg       0.95      0.94      0.94       400
+weighted avg       0.95      0.95      0.94       400
+
+Confusion Matrix:
+[[201   9]
+ [ 13 177]]
