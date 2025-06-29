@@ -100,39 +100,6 @@ pip install tensorflow numpy scikit-learn
 
 ---
 
-## 🧪 Evaluation Reports
-
-### `task_A_evaluation_report.txt`
-```
-Accuracy: 94.68%
-
-Classification Report:
-              precision    recall  f1-score   support
-
-      female       0.93      0.96      0.94       210
-        male       0.96      0.93      0.94       190
-
-    accuracy                           0.95       400
-   macro avg       0.95      0.94      0.94       400
-weighted avg       0.95      0.95      0.94       400
-
-Confusion Matrix:
-[[201   9]
- [ 13 177]]
-```
-
-### `task_B_evaluation_report.txt`
-```
-Top-1 Accuracy: 88.50%
-Classification Report:
-   Class 0 - F1: 0.91, Precision: 0.89, Recall: 0.92
-   ...
-Confusion Matrix: (20x20)
-[[18, 1, 0, ..., 0], ...]
-```
-
----
-
 
 ## 📌 Notes
 - Both models were trained and evaluated on **Kaggle GPU runtime**.
