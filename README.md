@@ -104,13 +104,21 @@ pip install tensorflow numpy scikit-learn
 
 ### `task_A_evaluation_report.txt`
 ```
-Accuracy: 92.65%
-Precision: 92.80%
-Recall: 91.90%
-F1-Score: 92.20%
+Accuracy: 94.68%
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      female       0.93      0.96      0.94       210
+        male       0.96      0.93      0.94       190
+
+    accuracy                           0.95       400
+   macro avg       0.95      0.94      0.94       400
+weighted avg       0.95      0.95      0.94       400
+
 Confusion Matrix:
-[[305  18]
- [ 25 292]]
+[[201   9]
+ [ 13 177]]
 ```
 
 ### `task_B_evaluation_report.txt`
