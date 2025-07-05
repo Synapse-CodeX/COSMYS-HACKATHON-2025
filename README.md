@@ -14,9 +14,6 @@ This repo contains solutions for both **Task A** (Gender Classification) and **T
 │ ├── evaluate_Task_A.py
 │ ├── train_Task_B.py
 │ └── evaluate_Task_B.py
-├── models/
-│ ├── best_model_task_A.h5
-│ └── best_model_task_B.h5
 ├── task_A_evaluation_report.txt
 ├── task_B_evaluation_report.txt
 └── README.md
